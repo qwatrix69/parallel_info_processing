@@ -24,4 +24,5 @@
 
 **Запуск программы:**
 
-    mpiexec -n process_count --oversubscribe lab3
+    ./lab5
+
