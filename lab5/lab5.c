@@ -7,7 +7,7 @@
 #define COLS 60
 #define MAX_VALUE 100
 
-void buble_column_sort(unsigned int *col, int n) {
+void bubble_column_sort(unsigned int *col, int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = 0; j < n - i - 1; j++) {
             if (col[j] < col[j + 1]) {
@@ -53,7 +53,7 @@ int main() {
     for (int j = 0; j < COLS; j++) {
         unsigned int col[ROWS];
         for (int i = 0; i < ROWS; i++) col[i] = matrix[i][j];
-        buble_column_sort(col, ROWS);
+        bubble_column_sort(col, ROWS);
         for (int i = 0; i < ROWS; i++) matrix[i][j] = col[i];
     }
     
