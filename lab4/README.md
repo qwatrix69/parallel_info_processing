@@ -24,4 +24,5 @@ N = 11
 
 **Запуск программы:**
 
-    mpiexec -n process_count --oversubscribe lab3
+    ./lab3
+
