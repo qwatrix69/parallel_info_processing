@@ -33,6 +33,10 @@ M = 10
     cmake ..
     make
 
-**Запуск программы:**
+**Запуск программы (сортировка по строкам):**
 
-    mpiexec -n process_count --oversubscribe lab3
+    mpiexec -n process_count --oversubscribe lab3 --rows
+
+**Запуск программы (сортировка по столбцам):**
+
+    mpiexec -n process_count --oversubscribe lab3 --columns

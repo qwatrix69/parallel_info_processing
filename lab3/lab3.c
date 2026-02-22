@@ -45,24 +45,24 @@ int main(int argc, char** argv) {
     
     if (argc < 2) {
         if (rank == 0) {
-            printf("Usage: %s --rows (sort columns) or --lines (sort rows)\n", argv[0]);
+            printf("Usage: %s --rows (sort rows) or --columns (sort colums)\n", argv[0]);
         }
         MPI_Finalize();
         return 1;
     }
     
-    if (strcmp(argv[1], "--lines") == 0) {
+    if (strcmp(argv[1], "--rows") == 0) {
         sort_type = 0;
         if (rank == 0) printf("Mode: sorting by rows\n");
     } 
-    else if (strcmp(argv[1], "--rows") == 0) {
+    else if (strcmp(argv[1], "--columns") == 0) {
         sort_type = 1;
         if (rank == 0) printf("Mode: sorting by columns\n");
     }
     else {
         if (rank == 0) {
             printf("Unknown option: %s\n", argv[1]);
-            printf("Use --rows (sort columns) or --lines (sort rows)\n");
+            printf("Use --rows (sort rows) or --columns (sort columns)\n");
         }
         MPI_Finalize();
         return 1;
