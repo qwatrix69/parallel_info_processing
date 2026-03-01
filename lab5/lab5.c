@@ -35,6 +35,7 @@ void save_matrix_full(unsigned int matrix[ROWS][COLS], const char *filename) {
 
 int main() {
     unsigned int matrix[ROWS][COLS];
+    double start_time, end_time;
     
     srand(time(NULL));
     
@@ -49,6 +50,8 @@ int main() {
     
     save_matrix_full(matrix, "original.txt");
     
+    start_time = omp_get_wtime();
+    
     #pragma omp parallel for
     for (int j = 0; j < COLS; j++) {
         unsigned int col[ROWS];
@@ -57,7 +60,11 @@ int main() {
         for (int i = 0; i < ROWS; i++) matrix[i][j] = col[i];
     }
     
+    end_time = omp_get_wtime();
+    
     save_matrix_full(matrix, "sorted.txt");
+    
+    printf("Sorting execution time: %f seconds\n", end_time - start_time);
     
     return 0;
 }

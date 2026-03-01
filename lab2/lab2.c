@@ -50,6 +50,9 @@ int main(int argc, char** argv) {
         result_vector = (unsigned int*)malloc(M * sizeof(unsigned int));
     }
     
+    MPI_Barrier(MPI_COMM_WORLD);
+    start_time = MPI_Wtime();
+    
     MPI_Reduce(
         local_vector,      
         result_vector,     
@@ -60,8 +63,11 @@ int main(int argc, char** argv) {
         MPI_COMM_WORLD
     );
     
+    end_time = MPI_Wtime();
+    
     if (rank == 0) {
         print_vector("\nResult", result_vector, M, 0);
+        printf("\nMPI_Reduce execution time: %f seconds\n", end_time - start_time);
     }
     
     free(local_vector);

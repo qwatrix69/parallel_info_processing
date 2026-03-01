@@ -7,6 +7,7 @@
 
 int main() {
     unsigned int *vector1, *vector2, *vector3;
+    double start_time, end_time;
     
     vector1 = (unsigned int*)malloc(N * sizeof(unsigned int));
     vector2 = (unsigned int*)malloc(N * sizeof(unsigned int));
@@ -25,16 +26,22 @@ int main() {
 
     printf("Number of threads: %d\n", omp_get_max_threads());
 
+    start_time = omp_get_wtime();
+
     #pragma omp parallel for 
     for (int i = 0; i < N; i++) {
         vector3[i] = vector1[i] + vector2[i];
     }
+
+    end_time = omp_get_wtime();
 
     printf("Results (unsigned int):\n");
     for (int i = 0; i < N; i++) {
         printf("vector3[%d] = %u (%u + %u)\n", 
                i, vector3[i], vector1[i], vector2[i]);
     }
+
+    printf("\nExecution time: %f seconds\n", end_time - start_time);
 
     free(vector1);
     free(vector2);

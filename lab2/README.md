@@ -31,4 +31,4 @@ M = 40
 
 **Запуск программы:**
 
-    mpiexec -n process_count --oversubscribe lab2
+    mpiexec -n 6 --oversubscribe lab2

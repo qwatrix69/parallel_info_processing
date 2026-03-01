@@ -31,7 +31,7 @@ N = 5
 
 **Запуск программы с Scatter:**
 
-    mpiexec -n process_count --oversubscribe lab1
+    mpiexec -n 5 --oversubscribe lab1
 
 **Запуск программы с Scatterv:**
 

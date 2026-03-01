@@ -38,6 +38,7 @@ int main(int argc, char** argv) {
     unsigned int *linearized_matrix;
     unsigned int *local_data;
     int sort_type;
+    double start_time, end_time;
     
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -117,6 +118,9 @@ int main(int argc, char** argv) {
     int local_blocks_count = sendcounts[rank] / block_size;
     local_data = (unsigned int*)malloc(sendcounts[rank] * sizeof(unsigned int));
     
+    MPI_Barrier(MPI_COMM_WORLD);
+    start_time = MPI_Wtime();
+    
     MPI_Scatterv(
         rank == 0 ? linearized_matrix : NULL,
         sendcounts,
@@ -154,6 +158,7 @@ int main(int argc, char** argv) {
         MPI_COMM_WORLD
     );
     
+    end_time = MPI_Wtime();
     
     if (rank == 0) {
         if (sort_type) {
@@ -176,6 +181,7 @@ int main(int argc, char** argv) {
             printf("%d ", sendcounts[i] / block_size);
         }
         printf("\n");
+        printf("Sorting execution time: %f seconds\n", end_time - start_time);
         
         free(linearized_matrix);
     }
