@@ -28,8 +28,9 @@ int main() {
 
     start_time = omp_get_wtime();
 
-    #pragma omp parallel for 
-    for (int i = 0; i < N; i++) {
+    int i;
+    #pragma omp parallel for shared(vector1, vector2, vector3) private(i) schedule(dynamic)
+    for (i = 0; i < N; i++) {
         vector3[i] = vector1[i] + vector2[i];
     }
 

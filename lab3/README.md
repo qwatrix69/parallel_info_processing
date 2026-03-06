@@ -24,6 +24,8 @@ M = 10
 
 **5. MPI_Scatterv(sendbuf, sendcounts, displs, MPI_INT, recvbuf, sendcounts[rank], MPI_INT, 0, MPI_COMM_WORLD)** - распределяет данных от одного процесса другим процессам. Рассылка происходит по всем процессам, включая root процесс. Исходный массив sendbuf делится по sendcounts элементов данных типа MPI_INT. Данные записываются в буферы recvbuf каждого процесса. Функция расширяет возможности Scatter, позволяя отправить каждому процессу разное количество элементов данных.
 
+![alt text](image.png)
+
 **6. MPI_Gatherv(local_data, sendcounts[rank], MPI_UNSIGNED, rank == 0 ? linearized_matrix : NULL,sendcounts, displs, MPI_UNSIGNED, 0, MPI_COMM_WORLD)** - обратная операция ScatterV, сбор данных от всех процессов к одному с неравным количеством частей.
 
 **7. MPI_Finalize()** - завершение работы окружения MPI

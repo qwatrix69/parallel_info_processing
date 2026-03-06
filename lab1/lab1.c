@@ -1,71 +1,69 @@
-#include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define M 7
-#define N 5
+#include <mpi.h>
 
 int main(int argc, char** argv) {
     int rank, size;
-    int *sendbuf = NULL, *recvbuf = NULL;
-    double start_time, end_time;
-
+    int M = 7;
+    int N = 5;
+    
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
+    
     if (size != N) {
-        if (rank == 0) {
-            printf("Error: Number of processes must be equal to N (%d)\n", N);
-        }
         MPI_Finalize();
         return 1;
     }
-
-    recvbuf = (int*)malloc(M * sizeof(int));
-
+    
+    double start_time, end_time;
+    int* send_vector = NULL;
+    int* recv_vector = NULL;
+    
+    recv_vector = (int*)malloc(M * sizeof(int));
+    
     if (rank == 0) {
-        sendbuf = (int*)malloc(M * N * sizeof(int));
-        for (int i = 0; i < M * N; i++) {
-            sendbuf[i] = i + 1; 
-        }
+        send_vector = (int*)malloc(M * N * sizeof(int));
 
         printf("Original vector (M=%d):\n", M);
+        
         for (int i = 0; i < M; i++) {
-            printf("%d ", sendbuf[i]);
+            int value = i * i;
+            printf("%d ", value);
+            for (int j = 0; j < N; j++) {
+                send_vector[j * M + i] = value;
+            }
         }
         printf("\n\n");
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
     start_time = MPI_Wtime();
-
-    MPI_Scatter(
-        sendbuf,                
-        M,            
-        MPI_INT,               
-        recvbuf,              
-        M,           
-        MPI_INT,             
-        0,                   
-        MPI_COMM_WORLD
-    );
-
-    end_time = MPI_Wtime();
     
-    printf("Process %d received %d elements:\n", rank, M);
-    for (int i = 0; i < M; i++)
-        printf("%d ", recvbuf[i]);
+    MPI_Scatter(send_vector, M, MPI_INT,
+                recv_vector, M, MPI_INT,
+                0, MPI_COMM_WORLD);
+    
+    MPI_Barrier(MPI_COMM_WORLD);
+    
+    if (rank == 0) {
+        end_time = MPI_Wtime();
+    }
+    
+    printf("Process %d received vector: ", rank);
+    for (int i = 0; i < M; i++) {
+        printf("%d ", recv_vector[i]);
+    }
     printf("\n");
-
+    
+    MPI_Barrier(MPI_COMM_WORLD);
+    
     if (rank == 0) {
-        printf("\nScatter execution time: %f seconds\n", end_time - start_time);
+        printf("\nExecution time: %f seconds\n", end_time - start_time);
+        free(send_vector);
     }
-
-    if (rank == 0) {
-        free(sendbuf);
-    }
-    free(recvbuf);
+    
+    free(recv_vector);
     
     MPI_Finalize();
     return 0;
